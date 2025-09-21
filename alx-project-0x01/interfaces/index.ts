@@ -27,4 +27,5 @@ export interface UserProps {
     catchPhrase: string;
     bs: string;
   };
+  posts?: PostProps[];
 }

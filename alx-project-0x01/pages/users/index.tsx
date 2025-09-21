@@ -17,14 +17,27 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
+      const [usersResponse, postsResponse] = await Promise.all([
+        fetch("https://jsonplaceholder.typicode.com/users"),
+        fetch("https://jsonplaceholder.typicode.com/posts")
+      ]);
+      
+      if (!usersResponse.ok || !postsResponse.ok) {
+        throw new Error("Failed to fetch data");
       }
-      const data = await response.json();
-      setUsers(data);
+      
+      const [usersData, postsData] = await Promise.all([
+        usersResponse.json(),
+        postsResponse.json()
+      ]);
+      
+      // Attach posts to each user
+      const usersWithPosts = usersData.map((user: UserProps) => ({
+        ...user,
+        posts: postsData.filter((post: any) => post.userId === user.id)
+      }));
+      
+      setUsers(usersWithPosts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -174,6 +187,28 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
                       </p>
                     </div>
                   </div>
+
+                  {selectedUser.posts && selectedUser.posts.length > 0 && (
+                    <div>
+                      <h3 className="font-semibold text-gray-800 mb-2">
+                        Posts ({selectedUser.posts.length})
+                      </h3>
+                      <div className="bg-gray-50 p-4 rounded-lg max-h-64 overflow-y-auto">
+                        <div className="space-y-3">
+                          {selectedUser.posts.map((post) => (
+                            <div key={post.id} className="border-b border-gray-200 pb-2 last:border-b-0">
+                              <h4 className="font-medium text-gray-800 text-sm mb-1">
+                                {post.title}
+                              </h4>
+                              <p className="text-xs text-gray-600">
+                                {post.body}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-6 flex justify-end">
@@ -191,12 +226,25 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
 };
 
 export async function getStaticProps() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users = await response.json();
+  const [usersResponse, postsResponse] = await Promise.all([
+    fetch("https://jsonplaceholder.typicode.com/users"),
+    fetch("https://jsonplaceholder.typicode.com/posts")
+  ]);
+  
+  const [users, posts] = await Promise.all([
+    usersResponse.json(),
+    postsResponse.json()
+  ]);
+  
+  // Attach posts to each user
+  const usersWithPosts = users.map((user: UserProps) => ({
+    ...user,
+    posts: posts.filter((post: any) => post.userId === user.id)
+  }));
 
   return {
     props: {
-      users,
+      users: usersWithPosts,
     },
   };
 }
