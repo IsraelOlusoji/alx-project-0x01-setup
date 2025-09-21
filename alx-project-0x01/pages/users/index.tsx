@@ -2,7 +2,8 @@ import Header from "@/components/layout/Header";
 import React, { useState } from "react";
 import Button from "../../components/common/Button";
 import UserCard from "../../components/common/UserCard";
-import { UserProps } from "@/interfaces";
+import UserModal from "../../components/common/UserModal";
+import { UserProps, UserData } from "@/interfaces";
 
 interface UsersPageProps {
   users: UserProps[];
@@ -13,6 +14,7 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -51,6 +53,11 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
 
   const handleCloseModal = () => {
     setSelectedUser(null);
+  };
+
+  const handleAddUser = (newUser: UserData) => {
+    const userWithId = { ...newUser, id: users.length + 1 };
+    setUsers(prevUsers => [...prevUsers, userWithId as UserProps]);
   };
 
   if (loading) {
@@ -98,9 +105,14 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
                 Manage and view user information
               </p>
             </div>
-            <Button onClick={fetchUsers} variant="outline">
-              Refresh
-            </Button>
+            <div className="flex gap-3">
+              <Button onClick={() => setModalOpen(true)} variant="primary">
+                Add User
+              </Button>
+              <Button onClick={fetchUsers} variant="outline">
+                Refresh
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -219,6 +231,11 @@ const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Add User Modal */}
+        {isModalOpen && (
+          <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
         )}
       </div>
     </div>

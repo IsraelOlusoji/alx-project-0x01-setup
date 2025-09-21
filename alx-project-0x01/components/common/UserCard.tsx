@@ -4,7 +4,7 @@ interface UserCardProps extends UserProps {
   onViewDetails?: (user: UserProps) => void;
 }
 
-const UserCard: React.FC<UserProps> = ({
+const UserCard: React.FC<UserCardProps> = ({
   id,
   name,
   username,
