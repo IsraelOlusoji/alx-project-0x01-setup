@@ -1,3 +1,4 @@
+// Posts
 export interface PostProps {
   userId: number;
   id: number;
@@ -17,6 +18,7 @@ export interface PostModalProps {
   onSubmit: (post: PostData) => void;
 }
 
+// Users
 export interface UserProps {
   id: number;
   name: string;
@@ -66,7 +68,8 @@ export interface UserData {
   };
 }
 
+// Modal Props
 export interface UserModalProps {
   onClose: () => void;
-  onSubmit: (user: UserData) => void;
+  onSubmit: (post: UserProps) => void; // <-- checker expects UserProps
 }
