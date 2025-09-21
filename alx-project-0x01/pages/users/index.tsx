@@ -1,41 +1,18 @@
 import Header from "@/components/layout/Header";
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "../../components/common/Button";
+import UserCard from "../../components/common/UserCard";
+import { UserProps } from "@/interfaces";
 
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  website: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
+interface UsersPageProps {
+  users: UserProps[];
 }
 
-const UsersPage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+const Users: React.FC<UsersPageProps> = ({ users: initialUsers }) => {
+  const [users, setUsers] = useState<UserProps[]>(initialUsers);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [selectedUser, setSelectedUser] = useState<UserProps | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -55,7 +32,7 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  const handleViewUser = (user: User) => {
+  const handleViewUser = (user: UserProps) => {
     setSelectedUser(user);
   };
 
@@ -117,42 +94,11 @@ const UsersPage: React.FC = () => {
         {/* Users Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {users.map((user) => (
-            <div
+            <UserCard
               key={user.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200"
-            >
-              <div className="mb-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {user.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-medium">Username:</span> {user.username}
-                </p>
-                <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-medium">Email:</span> {user.email}
-                </p>
-                <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-medium">Phone:</span> {user.phone}
-                </p>
-                <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-medium">Website:</span> {user.website}
-                </p>
-                <p className="text-gray-600 text-sm">
-                  <span className="font-medium">Company:</span>{" "}
-                  {user.company.name}
-                </p>
-              </div>
-
-              <div className="flex justify-end">
-                <Button
-                  onClick={() => handleViewUser(user)}
-                  variant="outline"
-                  size="sm"
-                >
-                  View Details
-                </Button>
-              </div>
-            </div>
+              {...user}
+              onViewDetails={handleViewUser}
+            />
           ))}
         </div>
 
@@ -244,4 +190,15 @@ const UsersPage: React.FC = () => {
   );
 };
 
-export default UsersPage;
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = await response.json();
+
+  return {
+    props: {
+      users,
+    },
+  };
+}
+
+export default Users;
