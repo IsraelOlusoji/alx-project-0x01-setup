@@ -1,3 +1,5 @@
+import Header from "@/components/layout/Header";
+
 import React, { useState, useEffect } from "react";
 import Button from "../../components/common/Button";
 
@@ -38,7 +40,9 @@ const UsersPage: React.FC = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch users");
       }
@@ -113,7 +117,10 @@ const UsersPage: React.FC = () => {
         {/* Users Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {users.map((user) => (
-            <div key={user.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+            <div
+              key={user.id}
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200"
+            >
               <div className="mb-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {user.name}
@@ -131,10 +138,11 @@ const UsersPage: React.FC = () => {
                   <span className="font-medium">Website:</span> {user.website}
                 </p>
                 <p className="text-gray-600 text-sm">
-                  <span className="font-medium">Company:</span> {user.company.name}
+                  <span className="font-medium">Company:</span>{" "}
+                  {user.company.name}
                 </p>
               </div>
-              
+
               <div className="flex justify-end">
                 <Button
                   onClick={() => handleViewUser(user)}
@@ -164,37 +172,64 @@ const UsersPage: React.FC = () => {
                     ×
                   </button>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Contact Information</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      Contact Information
+                    </h3>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm mb-1"><span className="font-medium">Email:</span> {selectedUser.email}</p>
-                      <p className="text-sm mb-1"><span className="font-medium">Phone:</span> {selectedUser.phone}</p>
-                      <p className="text-sm"><span className="font-medium">Website:</span> {selectedUser.website}</p>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Address</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-sm mb-1">
+                        <span className="font-medium">Email:</span>{" "}
+                        {selectedUser.email}
+                      </p>
+                      <p className="text-sm mb-1">
+                        <span className="font-medium">Phone:</span>{" "}
+                        {selectedUser.phone}
+                      </p>
                       <p className="text-sm">
-                        {selectedUser.address.street}, {selectedUser.address.suite}<br />
-                        {selectedUser.address.city}, {selectedUser.address.zipcode}
+                        <span className="font-medium">Website:</span>{" "}
+                        {selectedUser.website}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Company</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      Address
+                    </h3>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm mb-1"><span className="font-medium">Name:</span> {selectedUser.company.name}</p>
-                      <p className="text-sm mb-1"><span className="font-medium">Catchphrase:</span> {selectedUser.company.catchPhrase}</p>
-                      <p className="text-sm"><span className="font-medium">Business:</span> {selectedUser.company.bs}</p>
+                      <p className="text-sm">
+                        {selectedUser.address.street},{" "}
+                        {selectedUser.address.suite}
+                        <br />
+                        {selectedUser.address.city},{" "}
+                        {selectedUser.address.zipcode}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-2">
+                      Company
+                    </h3>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-sm mb-1">
+                        <span className="font-medium">Name:</span>{" "}
+                        {selectedUser.company.name}
+                      </p>
+                      <p className="text-sm mb-1">
+                        <span className="font-medium">Catchphrase:</span>{" "}
+                        {selectedUser.company.catchPhrase}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Business:</span>{" "}
+                        {selectedUser.company.bs}
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 flex justify-end">
                   <Button onClick={handleCloseModal} variant="primary">
                     Close
