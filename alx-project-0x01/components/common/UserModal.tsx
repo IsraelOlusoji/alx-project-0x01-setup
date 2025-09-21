@@ -46,7 +46,7 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onSubmit }) => {
         setUser(prevUser => ({
           ...prevUser,
           [parent]: {
-            ...prevUser[parent as keyof UserData],
+            ...(prevUser[parent as keyof UserData] as any),
             [child]: value
           }
         }));
