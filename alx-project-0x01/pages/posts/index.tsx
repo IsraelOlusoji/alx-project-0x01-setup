@@ -4,7 +4,11 @@ import { PostProps } from "@/interfaces";
 import React from "react";
 import Header from "@/components/layout/Header";
 
-const Posts: React.FC<PostProps[]> = ({ posts }) => {
+interface PostsPageProps {
+  posts: PostProps[];
+}
+
+const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   console.log(posts);
   return (
     <div className="flex flex-col h-screen">
