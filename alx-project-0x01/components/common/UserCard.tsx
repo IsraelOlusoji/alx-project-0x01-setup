@@ -1,10 +1,8 @@
 import { UserProps } from "@/interfaces";
 
-interface UserCardProps extends UserProps {
-  onViewDetails?: (user: UserProps) => void;
-}
-
-const UserCard: React.FC<UserCardProps> = ({
+const UserCard: React.FC<
+  UserProps & { onViewDetails?: (user: UserProps) => void }
+> = ({
   id,
   name,
   username,
@@ -155,7 +153,9 @@ const UserCard: React.FC<UserCardProps> = ({
           <div className="max-h-32 overflow-y-auto space-y-2">
             {posts.slice(0, 3).map((post) => (
               <div key={post.id} className="p-2 bg-gray-50 rounded text-xs">
-                <p className="font-medium text-gray-800 truncate">{post.title}</p>
+                <p className="font-medium text-gray-800 truncate">
+                  {post.title}
+                </p>
                 <p className="text-gray-600 line-clamp-2">{post.body}</p>
               </div>
             ))}
