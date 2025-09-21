@@ -1,8 +1,10 @@
 import { UserProps } from "@/interfaces";
 
-const UserCard: React.FC<
-  UserProps & { onViewDetails?: (user: UserProps) => void }
-> = ({
+interface UserCardProps extends UserProps {
+  onViewDetails?: (user: UserProps) => void;
+}
+
+const UserCard: React.FC<UserProps> = ({
   id,
   name,
   username,
