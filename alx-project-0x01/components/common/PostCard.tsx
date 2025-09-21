@@ -1,61 +1,15 @@
-import React from "react";
+import { PostProps } from "@/interfaces";
 
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-}
-
-interface PostCardProps {
-  post: Post;
-  onEdit?: (post: Post) => void;
-  onDelete?: (postId: number) => void;
-  showActions?: boolean;
-}
-
-const PostCard: React.FC<PostCardProps> = ({
-  post,
-  onEdit,
-  onDelete,
-  showActions = true,
-}) => {
+const PostCard: React.FC<PostProps> = ({ title, body, userId, id }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+    <div className="max-w-xl mx-auto my-6 p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="mb-4">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
-          {post.title}
-        </h3>
-        <p className="text-gray-600 leading-relaxed">
-          {post.body}
-        </p>
+        <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
       </div>
-      
-      <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-500">
-          User ID: {post.userId}
-        </span>
-        
-        {showActions && (
-          <div className="flex space-x-2">
-            {onEdit && (
-              <button
-                onClick={() => onEdit(post)}
-                className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors duration-200"
-              >
-                Edit
-              </button>
-            )}
-            {onDelete && (
-              <button
-                onClick={() => onDelete(post.id)}
-                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors duration-200"
-              >
-                Delete
-              </button>
-            )}
-          </div>
-        )}
+      <p className="text-gray-600">{body}</p>
+      <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+        <span>User ID: {userId}</span>
+        <span>Post ID: {id}</span>
       </div>
     </div>
   );
